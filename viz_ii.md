@@ -18,7 +18,10 @@ library(tidyverse)
 
 ``` r
 library(patchwork)
+library(viridis)
 ```
+
+    ## Loading required package: viridisLite
 
 ## Load the weather data
 
@@ -80,3 +83,75 @@ weather_df
     ##  9 CentralPark_NY USW00094728 2017-01-09     0  -4.9  -9.9
     ## 10 CentralPark_NY USW00094728 2017-01-10     0   7.8  -6  
     ## # … with 1,085 more rows
+
+## Start with a familiar one
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maxiumum daily temp (C)",
+    caption = "Data from the rnoaa package with three stations"
+  )
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+## Scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maxiumum daily temp (C)",
+    caption = "Data from the rnoaa package with three stations"
+    ) + 
+  scale_x_continuous(
+    breaks = c(-15, 0, 15), 
+    labels = c("-15º C", "0º", "15º")
+    ) +
+  scale_y_continuous(
+    trans = "sqrt",
+    position = "right"
+  )
+```
+
+    ## Warning in self$trans$transform(x): NaNs produced
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+    ## Warning: Removed 90 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .3) +
+  labs(
+    title = "Temperature at three stations",
+    x = "Minimum daily temp (C)",
+    y = "Maxiumum daily temp (C)",
+    caption = "Data from the rnoaa package with three stations"
+    ) +
+  scale_color_hue(
+    name = "Location",
+    h = c(100,300)
+    ) +
+  scale_color_viridis_d()
+```
+
+    ## Scale for 'colour' is already present. Adding another scale for 'colour',
+    ## which will replace the existing scale.
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
